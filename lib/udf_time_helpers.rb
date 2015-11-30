@@ -29,5 +29,23 @@ class UdfTimeHelpers
                            {query: "select ?('2015-03-30 21:32:15'::timestamp)", expect: '1427751521.107629', example: true, skip: true},
                        ]
       },
+      {
+          type:        :function,
+          name:        :is_last_day_of_month,
+          description: "Detects if a given date is on the last day of the month",
+          params:      "ts timestamp",
+          return_type: "boolean",
+          body:        %~
+            from datetime import datetime
+            import calendar
+            if ts is None:
+                return False
+            return calendar.monthrange(ts.year,ts.month)[1] == ts.day
+          ~,
+          tests:       [
+                           {query: "select ?('2015-10-01')", expect: 'f', example: true},
+                           {query: "select ?('2015-10-31')", expect: 't', example: true}
+                       ]
+      }
   ]
 end
