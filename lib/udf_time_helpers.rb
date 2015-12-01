@@ -46,6 +46,25 @@ class UdfTimeHelpers
                            {query: "select ?('2015-10-01')", expect: 'f', example: true},
                            {query: "select ?('2015-10-31')", expect: 't', example: true}
                        ]
+      },
+      {
+          type:        :function,
+          name:        :days_left_in_month,
+          description: "For a given date, calculates how many days are left in the month",
+          params:      "ts timestamp",
+          return_type: "int",
+          body:        %~
+            from datetime import datetime
+            import calendar
+            if ts is None:
+                return None
+            return calendar.monthrange(ts.year,ts.month)[1] - ts.day
+          ~,
+          tests:       [
+                           {query: "select ?('2015-11-01')", expect: 29, example: true},
+                           {query: "select ?('2015-12-28')", expect: 3, example: true},
+                           {query: "select ?(NULL)", expect: nil, example: true}
+                       ]
       }
   ]
 end
