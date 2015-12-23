@@ -11,6 +11,7 @@ class UdfHarness
     @udfs = [
         UdfAggHelpers::UDFS,
         UdfJsonArrays::UDFS,
+        UdfJsonObjects::UDFS,
         UdfMysqlCompat::UDFS,
         UdfTimeHelpers::UDFS,
         UdfStringUtils::UDFS,
