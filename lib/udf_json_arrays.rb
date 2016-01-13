@@ -234,6 +234,32 @@ class UdfJsonArrays
                                  {rows: ["foo", "bar", "baz"], expect: '["foo", "bar", "baz"]', example: true},
                                  {rows: ["foo"], expect: '["foo"]', example: true},
                              ]
+      }, {
+          type:              :function,
+          name:              :json_array_join,
+          description:       "returns a string in which the string elements of json array have been joined by specified separator",
+          params:      "j varchar(max), s varchar(255)",
+          return_type: "varchar(max)",
+          body:        %~
+            import json
+            if not j:
+              return None
+            if not s:
+              return None
+            try:
+              arr_j = json.loads(j)
+              return s.join(str(e) for e in arr_j)
+            except ValueError:
+              return None
+          ~,
+          tests:       [
+                           {query: "select ?('[\"a\",\"b\",\"c\"]', ',')", expect: 'a,b,c', example: true},
+                           {query: "select ?('[1, 2, 3, 4]', ' ')", expect: '1 2 3 4', example: true},
+                           {query: "select ?('[]', '')", expect: nil},
+                           {query: "select ?('', '5')", expect: nil},
+                           {query: "select ?('4', null)", expect: nil},
+                           {query: "select ?('abc', 'a')", expect: nil},
+                       ]
       }
   ]
 end
