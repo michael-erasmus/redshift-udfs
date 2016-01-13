@@ -57,7 +57,7 @@ class UdfJsonObjects
           type:        :function,
           name:        :json_object_value_at_key,
           description: "Returns the string value of in a json object at a specified key, or null if the index is out of range",
-          params:      "j varchar(max), k varchar",
+          params:      "j varchar(max), i int",
           return_type: "varchar(max)",
           body:        %~
             import json
